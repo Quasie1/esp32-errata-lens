@@ -21,7 +21,7 @@ I'm a computer engineering student who writes Verilog and firmware, and this is 
 
 ## Demo
 
-**Live app:** <!-- TODO: paste Vercel URL -->
+**Live app:** https://esp32-errata-lens.vercel.app (pick a silicon revision, then try an example question)
 
 <!-- TODO: embed video, e.g. {% embed https://www.youtube.com/watch?v=... %} -->
 
