@@ -57,7 +57,7 @@ Keyword search can find "PSRAM". It can't tell you that CPU-3.9 applies to your 
 
 ## Sanity Project Details
 
-<!-- TODO: Project ID: xxxxxxxx — dataset `production` (public) -->
+Project ID: `ziyzznsh`, dataset `production` (public). Try it: https://ziyzznsh.api.sanity.io/v2025-01-01/data/query/production?query=*[_type=="erratum"][0...5]{errataId,title,fixedIn}
 Schema: `chip`, `chipRevision` (with `efuseSignature` object), `erratum`. 32 errata × 5 revisions, transcribed from Espressif's errata summary tables.
 
 ## Agent Session
