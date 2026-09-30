@@ -21,11 +21,25 @@ I'm a computer engineering student who writes Verilog and firmware, and this is 
 
 ## Demo
 
-<!-- TODO: deployed URL + 60–90 s video: pick revision → ask GPIO36 question → expand the tool badges to show the GROQ query and KB entries → answer card -->
+**Live app:** <!-- TODO: paste Vercel URL -->
+
+<!-- TODO: embed video, e.g. {% embed https://www.youtube.com/watch?v=... %} -->
+
+An upgrade question, as answered by the agent (v1.1 → v3.1):
+
+| | Errata |
+| --- | --- |
+| Fixed going to v3.1 | CPU-3.9, CPU-3.10, RES-3.8 |
+| New on v3.1 | WDT-3.15 (dual-core live-lock, no silicon fix) |
+| Unchanged | 22, including GPIO-3.11 and all 11 TWAI (CAN) errata |
+
+It got those counts (25 on v1.1, 23 on v3.1) from GROQ joins, then read the Knowledge Base for the WDT-3.15 workaround: a level 4/5 timer interrupt on each core.
 
 ## Code
 
-<!-- TODO: GitHub repo link -->
+{% github Quasie1/esp32-errata-lens %}
+
+`studio/` holds the Sanity schema and seed data, and `app/` holds the Next.js agent. `README.md` covers setup from scratch.
 
 ## How I Used Sanity
 
@@ -36,7 +50,8 @@ I pointed a Knowledge Base ("ESP32 Silicon Truth") at two crawls: the Espressif 
 
 The build also caught a real contradiction I would have missed. The drafted SPI entry said the GPIO matrix caps SPI at **40 MHz**. The source says that's only true in half-duplex mode without DMA. For ordinary full-duplex reads the limit is **26.6 MHz**. Context raised it as a *Critical* conflict with both claims and their citations side by side:
 
-![SPI conflict raised by the Knowledge Base build](./screenshots/kb-issue-spi-conflict.jpg)
+<!-- TODO: in the DEV editor, click the image button and upload docs/screenshots/kb-issue-spi-conflict.jpg here -->
+![SPI conflict raised by the Knowledge Base build](https://raw.githubusercontent.com/Quasie1/esp32-errata-lens/main/docs/screenshots/kb-issue-spi-conflict.jpg)
 
 I picked the source's claim, and it became a standing instruction that survives rebuilds. I also wrote one by hand for GPIO-3.11, anchored to the errata page and the GPIO driver page: when they disagree, the errata wins for the revisions it lists.
 
