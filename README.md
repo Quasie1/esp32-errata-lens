@@ -18,7 +18,21 @@ esp32-errata-agent/
 | **Errata database** (Context, GROQ mode) | `erratum` → `chipRevision` references, `fixedIn`, `introducedIn` | "Which bugs does *my* v1.1 have that v3.1 fixes?" is a join, not a keyword search |
 | **`identifyRevision` tool** | Local parser | Turns esptool output / boot logs / module markings into a revision |
 
-## Setup (≈30 min)
+## Live setup (already done)
+
+| Piece | Value |
+| --- | --- |
+| Sanity project / dataset | `ziyzznsh` / `production` (public) |
+| Org | `oo0ts5x6x` |
+| Knowledge Base | ESP32 Silicon Truth (`kbeTm4DzEg5S`): errata site + ESP-IDF peripheral docs, 23 entries |
+| MCP endpoints | `esp32-kb` (Knowledge Base), `esp32-errata-db` (GROQ, filter `_type in ["chip","chipRevision","erratum"]`) |
+| Studio | Registered as external at `http://localhost:3333` (run `npm run dev` in `studio/`) |
+
+Remaining: create an org token with **Context → Viewer**, and put it plus your Anthropic key in `app/.env.local`.
+
+> GROQ gotcha: through Context, filter revisions with `references("rev-esp32-v1-1")`, not `"v1.1" in affectedRevisions[]->name`, which returns nothing.
+
+## Setup from scratch (≈30 min)
 
 ### 1. Sanity project + data
 ```bash

@@ -32,26 +32,34 @@ I'm a computer engineering student who writes Verilog and firmware, and this is 
 Two Sanity Context MCP endpoints, one per retrieval mode, because the problem has two halves.
 
 **1. Knowledge Base mode: reconciling prose that disagrees.**
-I pointed a Knowledge Base at the Espressif errata site (crawl) and the ESP32 datasheet PDF (upload). This is where Sanity Context earned its place: the build found places where the datasheet and errata disagree and raised them as **Issues**, with both claims side by side and their sources. I resolved each one (the errata wins for the revisions it lists) and added a standing instruction so rebuilds keep that decision.
+I pointed a Knowledge Base ("ESP32 Silicon Truth") at two crawls: the Espressif errata site (47 pages) and the ESP-IDF peripheral driver docs (25 pages). The build distilled 118 documents into 23 entries, tagging the errata topics `[core]` because the Knowledge Base's purpose names them.
 
-<!-- TODO: screenshot of the Issues view with a datasheet vs errata conflict -->
+The build also caught a real contradiction I would have missed. The drafted SPI entry said the GPIO matrix caps SPI at **40 MHz**. The source says that's only true in half-duplex mode without DMA. For ordinary full-duplex reads the limit is **26.6 MHz**. Context raised it as a *Critical* conflict with both claims and their citations side by side:
 
-The agent calls `initial_context` for the outline, then `knowledge_base_read` with several entry paths in one call to pull the datasheet claim, the erratum, and the workaround together.
+![SPI conflict raised by the Knowledge Base build](./screenshots/kb-issue-spi-conflict.jpg)
+
+I picked the source's claim, and it became a standing instruction that survives rebuilds. I also wrote one by hand for GPIO-3.11, anchored to the errata page and the GPIO driver page: when they disagree, the errata wins for the revisions it lists.
+
+A plain vector index over these pages would hand the agent both numbers and hope it picked right. Here the conflict gets settled once, at build time, by a person.
+
+The agent calls `initial_context` for the outline, then `knowledge_base_read` with several entry paths in one call (or `knowledge_base_search` when the outline doesn't make the location obvious).
 
 **2. GROQ mode: revision math that a keyword search can't do.**
 In the dataset, each `erratum` references the `chipRevision` documents it affects, plus `introducedIn` / `fixedIn`. Each revision stores its chip-marking letter, module code and eFuse signature. That turns questions into joins:
 
 ```groq
-// Bugs on my v1.1 that v3.1 fixes
-*[_type=="erratum" && "v1.1" in affectedRevisions[]->name
-  && !("v3.1" in affectedRevisions[]->name)]{errataId, title}
+// Bugs on my v1.1 that v3.1 fixes → CPU-3.9, CPU-3.10, RES-3.8
+*[_type=="erratum" && references("rev-esp32-v1-1")
+  && !references("rev-esp32-v3-1")]{errataId, title, fixedIn}
 ```
+
+One gotcha worth sharing: my first version filtered with `"v1.1" in affectedRevisions[]->name`. It works against the Content Lake directly, but through the Context GROQ endpoint it silently returned **zero results**. The endpoint rewrites dereferences into projections (`->{"name": name}`), so the `in` compared a string against objects. Switching to `references()` on the stable revision document IDs fixed it, and the system prompt now tells the agent to do the same.
 
 Keyword search can find "PSRAM". It can't tell you that CPU-3.9 applies to your v1.0/v1.1 board but not v3.x, or that upgrading brings in WDT-3.15. Structure can.
 
 **3. A small local tool** parses esptool output, ESP-IDF boot logs, and module markings (`MF`/`ME`/`MG`) into a revision, so users can paste what they already have.
 
-**Answer shape.** Every answer has the same four parts: Answer → Datasheet says → Errata override (with erratum IDs + links) → Your revision. The UI shows each MCP call as an expandable badge, so you can see the GROQ query and which KB entries were read.
+**Answer shape.** Every answer has the same four parts: Answer → Docs say → Errata override (with erratum IDs + links) → Your revision. The UI shows each MCP call as an expandable badge, so you can see the GROQ query and which KB entries were read.
 
 **Stack:** Next.js 16, Vercel AI SDK 6 (`@ai-sdk/mcp`), Claude, Sanity Studio 6.
 
