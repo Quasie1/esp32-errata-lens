@@ -23,7 +23,8 @@ I'm a computer engineering student who writes Verilog and firmware, and this is 
 
 **Live app:** https://esp32-errata-lens.vercel.app (pick a silicon revision, then try an example question)
 
-<!-- TODO: embed video, e.g. {% embed https://www.youtube.com/watch?v=... %} -->
+<!-- In the DEV editor, click the image button, upload errata-lens-demo.gif, and it will replace the line below. Optional: also upload errata-lens-demo.mp4 to YouTube (Unlisted) and add {% embed <url> %} -->
+![Errata Lens demo: GPIO36 glitch question, GROQ join, Knowledge Base conflict, v1.1 to v3.1 upgrade](errata-lens-demo.gif)
 
 An upgrade question, as answered by the agent (v1.1 → v3.1):
 
