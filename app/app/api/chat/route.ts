@@ -23,7 +23,12 @@ export async function POST(req: Request) {
       onError: () => context.close(),
       onAbort: () => context.close(),
     })
-    return result.toUIMessageStreamResponse()
+    return result.toUIMessageStreamResponse({
+      onError: (error) => {
+        console.error('[chat] stream error:', error)
+        return error instanceof Error ? error.message : String(error)
+      },
+    })
   } catch (err) {
     await context.close()
     throw err

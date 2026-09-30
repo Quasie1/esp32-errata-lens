@@ -25,6 +25,7 @@ function describeTool(part: ToolPart) {
     const paths = (input.paths as string[] | undefined) ?? []
     return {icon: '📖', label: `Read ${paths.length || ''} KB entr${paths.length === 1 ? 'y' : 'ies'}`, detail: paths.join(', ')}
   }
+  if (name === 'kb_knowledge_base_search') return {icon: '🔍', label: 'Searched Knowledge Base', detail: String(input.query ?? '')}
   if (name === 'db_groq_query') return {icon: '🗄️', label: 'Queried errata database', detail: String(input.query ?? '')}
   if (name === 'db_initial_context') return {icon: '🧭', label: 'Loaded errata schema'}
   if (name === 'db_schema_explorer') return {icon: '🧭', label: `Explored schema: ${String(input.type ?? '')}`}
