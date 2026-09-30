@@ -1,0 +1,23 @@
+{
+  "name": "esp32-errata-studio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "schema:deploy": "sanity schema deploy",
+    "seed": "node seed/build-seed.mjs && sanity dataset import seed/esp32.ndjson production --replace"
+  },
+  "dependencies": {
+    "@sanity/vision": "^6.17.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sanity": "^6.17.0",
+    "styled-components": "^6.1.18"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "typescript": "^5.8.3"
+  }
+}

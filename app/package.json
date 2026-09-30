@@ -1,0 +1,30 @@
+{
+  "name": "esp32-errata-agent",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "check:mcp": "node --env-file=.env.local scripts/check-mcp.mjs"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.125",
+    "@ai-sdk/mcp": "^1.0.89",
+    "@ai-sdk/react": "^3.0.300",
+    "ai": "^6.0.297",
+    "next": "^16.3.7",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "^5.8.3"
+  }
+}
