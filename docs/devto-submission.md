@@ -1,6 +1,5 @@
 ---
-title: Errata Lens: an ESP32 agent that knows when the datasheet is wrong
-published: false
+title: "Errata Lens: an ESP32 agent that knows when the datasheet is wrong"
 tags: devchallenge, sanitychallenge, sanity, ai
 ---
 
@@ -23,8 +22,7 @@ I'm a computer engineering student who writes Verilog and firmware, and this is 
 
 **Live app:** https://esp32-errata-lens.vercel.app (pick a silicon revision, then try an example question)
 
-<!-- In the DEV editor, click the image button, upload errata-lens-demo.gif, and it will replace the line below. Optional: also upload errata-lens-demo.mp4 to YouTube (Unlisted) and add {% embed <url> %} -->
-![Errata Lens demo: GPIO36 glitch question, GROQ join, Knowledge Base conflict, v1.1 to v3.1 upgrade](errata-lens-demo.gif)
+![Errata Lens demo: GPIO36 glitch question, GROQ join, Knowledge Base conflict, v1.1 to v3.1 upgrade](https://raw.githubusercontent.com/Quasie1/esp32-errata-lens/main/docs/demo/errata-lens-demo.gif)
 
 An upgrade question, as answered by the agent (v1.1 → v3.1):
 
@@ -51,7 +49,6 @@ I pointed a Knowledge Base ("ESP32 Silicon Truth") at two crawls: the Espressif 
 
 The build also caught a real contradiction I would have missed. The drafted SPI entry said the GPIO matrix caps SPI at **40 MHz**. The source says that's only true in half-duplex mode without DMA. For ordinary full-duplex reads the limit is **26.6 MHz**. Context raised it as a *Critical* conflict with both claims and their citations side by side:
 
-<!-- TODO: in the DEV editor, click the image button and upload docs/screenshots/kb-issue-spi-conflict.jpg here -->
 ![SPI conflict raised by the Knowledge Base build](https://raw.githubusercontent.com/Quasie1/esp32-errata-lens/main/docs/screenshots/kb-issue-spi-conflict.jpg)
 
 I picked the source's claim, and it became a standing instruction that survives rebuilds. I also wrote one by hand for GPIO-3.11, anchored to the errata page and the GPIO driver page: when they disagree, the errata wins for the revisions it lists.
@@ -83,10 +80,6 @@ Keyword search can find "PSRAM". It can't tell you that CPU-3.9 applies to your 
 
 Project ID: `ziyzznsh`, dataset `production` (public). Try it: https://ziyzznsh.api.sanity.io/v2025-01-01/data/query/production?query=*[_type=="erratum"][0...5]{errataId,title,fixedIn}
 Schema: `chip`, `chipRevision` (with `efuseSignature` object), `erratum`. 32 errata × 5 revisions, transcribed from Espressif's errata summary tables.
-
-## Agent Session
-
-<!-- Optional: upload Claude Code transcript at https://dev.to/agent_sessions/new, make public, embed -->
 
 ## Credits
 Errata data © Espressif Systems, from the [ESP32 Series SoC Errata](https://docs.espressif.com/projects/esp-chip-errata/en/latest/esp32/). The dataset stores only IDs, titles and revision applicability; all prose comes from the Knowledge Base with citations back to Espressif.
